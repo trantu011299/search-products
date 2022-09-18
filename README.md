@@ -25,6 +25,10 @@ You may also see any lint errors in the console.
 3. Khi listProducts > 0 thì: 
 - Hiển thị tất cả sản phẩm thỏa mãn điều kiện lọc theo keySearch
 
+### Giao diện
+
+1. Hover vào ảnh sản phẩm để hiển thị thông tin chị tiết
+
 ### Logic search
 
 1. Dùng toLowerCase() để đồng bộ keysearch và title về dạng viết thường

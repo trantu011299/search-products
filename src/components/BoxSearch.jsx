@@ -10,6 +10,9 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Chip from '@mui/material/Chip';
+import Tooltip from '@mui/material/Tooltip';
+import Zoom from '@mui/material/Zoom';
+import { red } from '@mui/material/colors';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
@@ -84,9 +87,21 @@ const BoxSearch = () => {
                                         return (
                                             <List key={item.id} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                                                 <ListItem alignItems="flex-start">
-                                                    <ListItemAvatar>
-                                                    <Avatar alt={item.image.id} src={item.image.src} />
-                                                    </ListItemAvatar>
+                                                    <Tooltip title={
+                                                        <div>
+                                                            <p>Cho phép mua bất kể số lượng: {item.variants[0].inventory_management !== null ? "Cho phép" : "Không cho phép"}
+                                                            </p>
+                                                            <p>Cho phép đặt hàng khi kho hết hàng: {item.variants[0].inventory_policy === 'allow' ? "Cho phép" : "Không cho phép"}
+                                                            </p>
+                                                            <p>Số lượng hàng trong kho: {item.variants[0].inventory_quantity}</p>
+                                                        </div>
+                                                    }
+                                                    TransitionComponent={Zoom}
+                                                    TransitionProps={{ timeout: 600 }}>
+                                                        <ListItemAvatar>
+                                                        <Avatar alt={item.image.id} src={item.image.src} />
+                                                        </ListItemAvatar>
+                                                    </Tooltip>
                                                     <ListItemText
                                                     primary={
                                                         <div style={{display: 'flex', alignItems: 'center'}}>
@@ -120,7 +135,6 @@ const BoxSearch = () => {
                                                                     )
                                                                 }
                                                             </div>
-
                                                         </div>
                                                     }
                                                     />
@@ -133,35 +147,64 @@ const BoxSearch = () => {
                             </>
                         ) : (
                             <div className="suggestSearch">
-                                <p>Không tìm thấy sản phẩm phù hợp</p>
+                                <p style={{margin: "10px", color: 'red'}}>Không tìm thấy sản phẩm phù hợp!</p>
                             </div>
                         )
                     ) :(
                         <div className="suggestSearch">
                             {Array.isArray(listProducts) && listProducts.map((item) => {
                                 return (
-                                    // <div key={item.id} className="product">
-                                    //     <p>{item.title}</p>
-                                    // </div>
                                     <List key={item.id} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                                         <ListItem alignItems="flex-start">
-                                            <ListItemAvatar>
-                                            <Avatar alt={item.image.id} src={item.image.src} />
-                                            </ListItemAvatar>
+                                            <Tooltip title={
+                                                <div>
+                                                    <p>Cho phép mua bất kể số lượng: {item.variants[0].inventory_management !== null ? "Cho phép" : "Không cho phép"}
+                                                    </p>
+                                                    <p>Cho phép đặt hàng khi kho hết hàng: {item.variants[0].inventory_policy === 'allow' ? "Cho phép" : "Không cho phép"}
+                                                    </p>
+                                                    <p>Số lượng hàng trong kho: {item.variants[0].inventory_quantity}</p>
+                                                </div>
+                                            }
+                                            TransitionComponent={Zoom}
+                                            TransitionProps={{ timeout: 600 }}>
+                                                <ListItemAvatar>
+                                                <Avatar alt={item.image.id} src={item.image.src} />
+                                                </ListItemAvatar>
+                                            </Tooltip>
                                             <ListItemText
-                                            primary={item.title}
+                                            primary={
+                                                <div style={{display: 'flex', alignItems: 'center'}}>
+                                                    <div style={{textDecoration: item.variants[0].inventory_quantity !== 0 ? 'none' : 'line-through'}}>
+                                                    <span style={{marginRight: 5}}>{`${item.title}`}</span>
+                                                    {
+                                                        item.variants[0].price !== item.variants[0].compare_at_price && (
+                                                            <Chip color="error" label={percentage(item.variants[0].price, item.variants[0].compare_at_price)} />
+                                                        )
+                                                    }
+                                                    </div>
+                                                    <span style={{marginLeft: 5, color: 'red'}}>{item.variants[0].inventory_quantity !== 0 ? '' : 'HẾT HÀNG'}</span>
+                                                </div>
+                                            }
                                             secondary={
-                                                <React.Fragment>
-                                                <Typography
-                                                    sx={{ display: 'inline' }}
-                                                    component="span"
-                                                    variant="body2"
-                                                    color="text.primary"
-                                                >
-                                                    Ali Connors
-                                                </Typography>
-                                                {" — I'll be in your neighborhood doing errands this…"}
-                                                </React.Fragment>
+                                                <div>
+                                                    <div style={{textDecoration: item.variants[0].inventory_quantity !== 0 ? 'none' : 'line-through'}}>
+                                                        <Typography
+                                                            sx={{ display: 'inline' }}
+                                                            component="span"
+                                                            variant="body2"
+                                                            color="text.primary"
+                                                        >
+                                                            {`${formatCurr(item.variants[0].compare_at_price)} `}
+                                                        </Typography>
+                                                        {
+                                                            item.variants[0].price !== item.variants[0].compare_at_price && (
+                                                                <>
+                                                                    giảm giá còn <span style={{color: 'red'}}>{formatCurr(item.variants[0].price)}</span>
+                                                                </>
+                                                            )
+                                                        }
+                                                    </div>
+                                                </div>
                                             }
                                             />
                                         </ListItem>
