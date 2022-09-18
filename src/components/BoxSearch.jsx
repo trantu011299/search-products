@@ -70,7 +70,7 @@ const BoxSearch = () => {
                     setShowSuggest(true)
                 }} 
                 onBlur={() => {
-                    // setShowSuggest(false)
+                    setShowSuggest(false)
                     setListProducts([])
                 }} 
                 onChange={(e) => onSearchProducts(e.target.value)}
